@@ -1,0 +1,32 @@
+{
+  "name": "Meeting",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "place": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "participants": {
+      "type": "hasAndBelongsToMany",
+      "model": "Associate",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

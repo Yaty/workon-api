@@ -1,0 +1,29 @@
+{
+  "name": "Message",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "content": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "account": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": ""
+    },
+    "thread": {
+      "type": "belongsTo",
+      "model": "Thread",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

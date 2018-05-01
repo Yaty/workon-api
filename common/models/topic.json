@@ -1,0 +1,35 @@
+{
+  "name": "Topic",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "state": {
+      "type": "string",
+      "required": true,
+      "default": "ouvert"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "workArea": {
+      "type": "belongsTo",
+      "model": "WorkArea",
+      "foreignKey": ""
+    },
+    "thread": {
+      "type": "belongsTo",
+      "model": "Thread",
+      "foreignKey": ""
+    },
+    "task": {
+      "type": "belongsTo",
+      "model": "Task",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

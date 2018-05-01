@@ -1,0 +1,29 @@
+{
+  "name": "WorkArea",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "project": {
+      "type": "belongsTo",
+      "model": "Project",
+      "foreignKey": ""
+    },
+    "topics": {
+      "type": "hasMany",
+      "model": "Topic",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

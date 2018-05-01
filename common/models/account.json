@@ -1,0 +1,39 @@
+{
+  "name": "Account",
+  "plural": "accounts",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "lastname": {
+      "type": "string",
+      "required": true
+    },
+    "firstname": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "collaborators": {
+      "type": "hasAndBelongsToMany",
+      "model": "Account",
+      "foreignKey": ""
+    },
+    "messages": {
+      "type": "hasMany",
+      "model": "Message",
+      "foreignKey": ""
+    },
+    "threads": {
+      "type": "hasAndBelongsToMany",
+      "model": "Thread",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

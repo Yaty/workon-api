@@ -1,0 +1,39 @@
+{
+  "name": "Task",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "state": {
+      "type": "string",
+      "required": true,
+      "default": "En attente"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "workers": {
+      "type": "hasAndBelongsToMany",
+      "model": "Associate",
+      "foreignKey": ""
+    },
+    "step": {
+      "type": "belongsTo",
+      "model": "Step",
+      "foreignKey": ""
+    },
+    "topic": {
+      "type": "belongsTo",
+      "model": "Topic",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
