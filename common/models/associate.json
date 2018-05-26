@@ -8,19 +8,9 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "associateProjectRoles": {
+    "roles": {
       "type": "hasAndBelongsToMany",
       "model": "AssociateProjectRole",
-      "foreignKey": ""
-    },
-    "account": {
-      "type": "belongsTo",
-      "model": "Account",
-      "foreignKey": ""
-    },
-    "project": {
-      "type": "belongsTo",
-      "model": "Project",
       "foreignKey": ""
     },
     "tasks": {
@@ -31,6 +21,16 @@
     "meetings": {
       "type": "hasAndBelongsToMany",
       "model": "Meeting",
+      "foreignKey": ""
+    },
+    "account": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": ""
+    },
+    "project": {
+      "type": "belongsTo",
+      "model": "Project",
       "foreignKey": ""
     }
   },

@@ -32,6 +32,12 @@
       "type": "hasAndBelongsToMany",
       "model": "Thread",
       "foreignKey": ""
+    },
+    "project": {
+      "type": "hasMany",
+      "model": "Project",
+      "foreignKey": "",
+      "through": "Associate"
     }
   },
   "acls": [],

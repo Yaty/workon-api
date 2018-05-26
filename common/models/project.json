@@ -13,11 +13,6 @@
   },
   "validations": [],
   "relations": {
-    "project": {
-      "type": "belongsTo",
-      "model": "Project",
-      "foreignKey": ""
-    },
     "director": {
       "type": "belongsTo",
       "model": "Associate",
@@ -25,8 +20,9 @@
     },
     "workers": {
       "type": "hasMany",
-      "model": "Associate",
-      "foreignKey": ""
+      "model": "Account",
+      "foreignKey": "",
+      "through": "Associate"
     },
     "meetings": {
       "type": "hasMany",
