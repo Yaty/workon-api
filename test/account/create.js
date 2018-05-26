@@ -4,7 +4,7 @@ const api = require('../api');
 const {expect} = require('chai');
 const {uuid, isValidValidationError} = require('../utils');
 
-describe('Create', function() {
+describe('Account creation', function() {
   let account;
 
   beforeEach(function() {
