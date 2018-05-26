@@ -13,6 +13,12 @@ function generateAccountData() {
   };
 }
 
+function generateProjectData() {
+  return {
+    name: self.uuid(),
+  };
+}
+
 const self = module.exports = {
   uuid() {
     return String(Math.random()).substring(2);
@@ -37,7 +43,7 @@ const self = module.exports = {
       }
     }
   },
-  createAccount(data) {
+  createAccount(data = generateAccountData()) {
     return new Promise((resolve, reject) => {
       api.post('/api/accounts')
         .send(data)
@@ -50,5 +56,43 @@ const self = module.exports = {
   accountFactory(number) {
     const data = Array.from({length: number}, generateAccountData);
     return Promise.all(data.map(account => self.createAccount(account)));
+  },
+  addWorker(projectId, workerId) {
+    return new Promise((resolve, reject) => {
+      api.put('/api/projects/' + projectId + '/workers/rel/' + workerId)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  addWorkers(projectId, workerIds) {
+    return Promise.all(workerIds.map(wId => self.addWorkers(projectId, wId)));
+  },
+  getProject(id) {
+    return new Promise((resolve, reject) => {
+      api.get('/api/projects/' + id + '?filter[include]=workers')
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  async createProject(data = generateProjectData(), directorId, workers) {
+    directorId = directorId || (await self.createAccount()).id;
+    workers = await self.accountFactory(workers);
+
+    return new Promise((resolve, reject) => {
+      api.post('/api/projects')
+        .send({
+          ...data,
+          directorId,
+        })
+        .end(async (err, res) => {
+          if (err) return reject(err);
+          await self.addWorkers(res.body.id, workers.map(w => w.id));
+          return resolve(await self.getProject(res.body.id));
+        });
+    });
   },
 };

@@ -3,7 +3,7 @@
 
 const api = require('../api');
 const {expect} = require('chai');
-const {uuid, accountFactory} = require('../utils');
+const {uuid, accountFactory, createProject, getProject} = require('../utils');
 
 describe('Project creation', function() {
   let project;
@@ -38,28 +38,15 @@ describe('Project creation', function() {
       });
   });
 
-  it('create a project with workers', function(done) {
-    let projectId;
-    api.post('/api/projects')
-      .send(project)
+  it('create a project with workers', async function() {
+    const {id} = await createProject();
+    const [worker] = await accountFactory(1);
+
+    return api.put('/api/projects/' + id + '/workers/rel/' + worker.id)
       .expect(200)
-      .end(async function(err, res) {
-        if (err) return done(err);
-        const [worker] = await accountFactory(1);
-        projectId = res.body.id;
-        api.put('/api/projects/' + projectId + '/workers/rel/' + worker.id)
-          .expect(200)
-          .end((err, res) => {
-            if (err) return done(err);
-            api.get('/api/projects/' + projectId + '/workers')
-              .expect(200)
-              .end((err, res) => {
-                if (err) return done(err);
-                expect(res.body).to.be.an('array');
-                expect(res.body[0].id).to.be.equal(worker.id);
-                done();
-              });
-          });
+      .then(async () => {
+        const project = await getProject(id);
+        expect(project.workers[0].id).to.be.equal(worker.id);
       });
   });
 });
