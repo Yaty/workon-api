@@ -1,8 +1,19 @@
 'use strict';
 
 const {expect} = require('chai');
+const api = require('./api');
 
-module.exports = {
+function generateAccountData() {
+  return {
+    username: self.uuid(),
+    email: self.uuid() + '@' + self.uuid() + '.fr',
+    password: self.uuid(),
+    lastname: self.uuid(),
+    firstname: self.uuid(),
+  };
+}
+
+const self = module.exports = {
   uuid() {
     return String(Math.random()).substring(2);
   },
@@ -25,5 +36,19 @@ module.exports = {
         expect(body.error.details.messages[key]).to.include(message);
       }
     }
+  },
+  createAccount(data) {
+    return new Promise((resolve, reject) => {
+      api.post('/api/accounts')
+        .send(data)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  accountFactory(number) {
+    const data = Array.from({length: number}, generateAccountData);
+    return Promise.all(data.map(account => self.createAccount(account)));
   },
 };
