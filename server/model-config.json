@@ -37,47 +37,47 @@
     "public": false
   },
   "Meeting": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Project": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Step": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "WorkArea": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Task": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Associate": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "AssociateProjectRole": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Account": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Message": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Thread": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   },
   "Topic": {
-    "dataSource": "mysql",
+    "dataSource": "db",
     "public": true
   }
 }

@@ -53,9 +53,36 @@ const self = module.exports = {
         });
     });
   },
-  accountFactory(number) {
+  login(username, password) {
+    return new Promise((resolve, reject) => {
+      api.post('/api/accounts/login')
+        .send({
+          username,
+          password,
+        })
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  async accountFactory(number, options = {}) {
     const data = Array.from({length: number}, generateAccountData);
-    return Promise.all(data.map(account => self.createAccount(account)));
+    const accounts = await Promise.all(
+      data.map(account => self.createAccount(account))
+    );
+
+    if (options.login) {
+      for (const account of accounts) {
+        const {username, password} = data.find(a => {
+          return a.username === account.username;
+        });
+        const {id} = await self.login(username, password);
+        account.token = id;
+      }
+    }
+
+    return accounts;
   },
   addWorker(projectId, workerId) {
     return new Promise((resolve, reject) => {
@@ -69,9 +96,10 @@ const self = module.exports = {
   addWorkers(projectId, workerIds) {
     return Promise.all(workerIds.map(wId => self.addWorkers(projectId, wId)));
   },
-  getProject(id) {
+  getProject(id, accountToken) {
     return new Promise((resolve, reject) => {
       api.get('/api/projects/' + id + '?filter[include]=workers')
+        .set('Authorization', 'Bearer ' + accountToken)
         .end((err, res) => {
           if (err) return reject(err);
           return resolve(res.body);
@@ -92,6 +120,49 @@ const self = module.exports = {
           if (err) return reject(err);
           await self.addWorkers(res.body.id, workers.map(w => w.id));
           return resolve(await self.getProject(res.body.id));
+        });
+    });
+  },
+  getCollaborator(accountId, collaboratorId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get('/api/accounts/' + accountId + '/collaborators/' + collaboratorId)
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  createThread(accountId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.post('/api/accounts/' + accountId + '/threads')
+        .set('Authorization', 'Bearer ' + accountToken)
+        .send({
+          name: String(Math.random()),
+        })
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getMessage(accountId, messageId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get('/api/accounts/' + accountId + '/messages/' + messageId)
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getThread(accountId, threadId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get('/api/accounts/' + accountId + '/threads/' + threadId)
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
         });
     });
   },

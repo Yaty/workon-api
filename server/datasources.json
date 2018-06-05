@@ -1,16 +1,12 @@
 {
   "db": {
     "name": "db",
-    "connector": "memory"
-  },
-  "mysql": {
-    "host": "127.0.0.1",
-    "port": 3306,
-    "url": "",
+    "host": "localhost",
+    "port": 27017,
+    "url":  "",
     "database": "workon",
-    "password": "root",
-    "name": "mysql",
-    "user": "root",
-    "connector": "mysql"
+    "password": "",
+    "user": "",
+    "connector": "mongodb"
   }
 }

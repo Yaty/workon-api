@@ -19,9 +19,8 @@
   "validations": [],
   "relations": {
     "collaborators": {
-      "type": "hasAndBelongsToMany",
-      "model": "Account",
-      "foreignKey": ""
+      "type": "referencesMany",
+      "model": "Account"
     },
     "messages": {
       "type": "hasMany",
@@ -33,13 +32,32 @@
       "model": "Thread",
       "foreignKey": ""
     },
-    "project": {
+    "projects": {
       "type": "hasMany",
       "model": "Project",
       "foreignKey": "",
       "through": "Associate"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType":"*",
+      "principalType":"ROLE",
+      "principalId":"$everyone",
+      "permission":"DENY"
+    },
+    {
+      "accessType":"READ",
+      "principalType":"ROLE",
+      "principalId":"$owner",
+      "permission":"ALLOW"
+    },
+    {
+      "accessType":"WRITE",
+      "principalType":"ROLE",
+      "principalId":"$owner",
+      "permission":"ALLOW"
+    }
+  ],
   "methods": {}
 }
