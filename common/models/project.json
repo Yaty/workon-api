@@ -13,16 +13,10 @@
   },
   "validations": [],
   "relations": {
-    "director": {
-      "type": "belongsTo",
-      "model": "Associate",
-      "foreignKey": ""
-    },
-    "workers": {
-      "type": "hasMany",
+    "accounts": {
+      "type": "hasAndBelongsToMany",
       "model": "Account",
-      "foreignKey": "",
-      "through": "Associate"
+      "foreignKey": ""
     },
     "meetings": {
       "type": "hasMany",
@@ -38,8 +32,31 @@
       "type": "hasMany",
       "model": "WorkArea",
       "foreignKey": ""
+    },
+    "roles": {
+      "type": "hasMany",
+      "model": "ProjectRole",
+      "foreignKey": ""
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "principalType":"ROLE",
+      "principalId":"$everyone",
+      "permission":"DENY"
+    },
+    {
+      "property": "__get__workers",
+      "principalType":"ROLE",
+      "principalId":"$authenticated",
+      "permission":"ALLOW"
+    },
+    {
+      "property": "__get__roles",
+      "principalType":"ROLE",
+      "principalId":"$authenticated",
+      "permission":"ALLOW"
+    }
+  ],
   "methods": {}
 }

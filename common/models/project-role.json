@@ -1,5 +1,5 @@
 {
-  "name": "AssociateProjectRole",
+  "name": "ProjectRole",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -13,9 +13,14 @@
   },
   "validations": [],
   "relations": {
-    "associates": {
+    "project": {
+      "type": "belongsTo",
+      "model": "Project",
+      "foreignKey": ""
+    },
+    "accounts": {
       "type": "hasAndBelongsToMany",
-      "model": "Associate",
+      "model": "Account",
       "foreignKey": ""
     }
   },

@@ -77,6 +77,7 @@ const self = module.exports = {
         const {username, password} = data.find(a => {
           return a.username === account.username;
         });
+
         const {id} = await self.login(username, password);
         account.token = id;
       }
@@ -84,21 +85,12 @@ const self = module.exports = {
 
     return accounts;
   },
-  addWorker(projectId, workerId) {
+  getProject(accountId, projectId, accountToken) {
     return new Promise((resolve, reject) => {
-      api.put('/api/projects/' + projectId + '/workers/rel/' + workerId)
-        .end((err, res) => {
-          if (err) return reject(err);
-          return resolve(res.body);
-        });
-    });
-  },
-  addWorkers(projectId, workerIds) {
-    return Promise.all(workerIds.map(wId => self.addWorkers(projectId, wId)));
-  },
-  getProject(id, accountToken) {
-    return new Promise((resolve, reject) => {
-      api.get('/api/projects/' + id + '?filter[include]=workers')
+      api.get(
+        '/api/accounts/' + accountId +
+        '/projects/' + projectId
+      )
         .set('Authorization', 'Bearer ' + accountToken)
         .end((err, res) => {
           if (err) return reject(err);
@@ -106,20 +98,48 @@ const self = module.exports = {
         });
     });
   },
-  async createProject(data = generateProjectData(), directorId, workers) {
-    directorId = directorId || (await self.createAccount()).id;
-    workers = await self.accountFactory(workers);
+  addAccountToProject(accountId, projectId, directorToken) {
+    return new Promise((resolve, reject) => {
+      api.put('/api/accounts/' + accountId + '/projects/rel/' + projectId)
+        .set('Authorization', 'Bearer ' + directorToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  addAccountsToProject(accountIds, projectId, directorToken) {
+    return Promise.all(accountIds.map((aId) => {
+      return self.addAccountToProject(aId, projectId, directorToken);
+    }));
+  },
+  async createProject(nbWorkers, dir) {
+    const [accounts] = await self.accountFactory(nbWorkers, {
+      login: true,
+    });
+
+    if (!dir) {
+      [dir] = await self.accountFactory(1, {
+        login: true,
+      });
+    }
 
     return new Promise((resolve, reject) => {
-      api.post('/api/projects')
-        .send({
-          ...data,
-          directorId,
-        })
+      api.post('/api/accounts/' + dir.id + '/projects')
+        .set('Authorization', 'Bearer ' + dir.token)
+        .send(generateProjectData())
         .end(async (err, res) => {
           if (err) return reject(err);
-          await self.addWorkers(res.body.id, workers.map(w => w.id));
-          return resolve(await self.getProject(res.body.id));
+
+          if (accounts && accounts.length > 0) {
+            await self.addAccountsToProject(
+              accounts.map(w => w.id),
+              res.body.id,
+              dir.token,
+            );
+          }
+
+          return resolve(await self.getProject(dir.id, res.body.id, dir.token));
         });
     });
   },
@@ -163,6 +183,74 @@ const self = module.exports = {
         .end((err, res) => {
           if (err) return reject(err);
           return resolve(res.body);
+        });
+    });
+  },
+  createRole(projectId, directorToken) {
+    return new Promise((resolve, reject) => {
+      api.post('/api/projects/' + projectId + '/roles')
+        .set('Authorization', 'Bearer ' + directorToken)
+        .send({
+          name: String(Math.random()),
+        })
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getAccountRoleById(accountId, roleId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get('/api/accounts/' + accountId + '/roles/' + roleId)
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getAccountsInProject(accountId, projectId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get(
+        '/api/accounts/' + accountId +
+        '/projects/' + projectId + '/accounts'
+      )
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getAccountRolesInProject(accountId, projectId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get(
+        '/api/accounts/' + accountId +
+        '/projects/' + projectId + '/roles'
+      )
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getProjectDirectors(projectId, accountToken) {
+    return new Promise((resolve, reject) => {
+      const filter = {
+        include: {
+          relation: 'accounts',
+        },
+      };
+
+      api.get(
+        '/api/projects/' + projectId +
+        '/roles?filter={"include":{"relation":"accounts"}}'
+      )
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body.filter((role) => role.name === 'director'));
         });
     });
   },

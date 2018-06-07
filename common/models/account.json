@@ -33,30 +33,48 @@
       "foreignKey": ""
     },
     "projects": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "Project",
-      "foreignKey": "",
-      "through": "Associate"
+      "foreignKey": ""
+    },
+    "roles": {
+      "type": "hasAndBelongsToMany",
+      "model": "ProjectRole",
+      "foreignKey": ""
+    },
+    "tasks": {
+      "type": "hasAndBelongsToMany",
+      "model": "Task",
+      "foreignKey": ""
+    },
+    "meetings": {
+      "type": "hasAndBelongsToMany",
+      "model": "Meeting",
+      "foreignKey": ""
     }
   },
   "acls": [
     {
-      "accessType":"*",
       "principalType":"ROLE",
       "principalId":"$everyone",
       "permission":"DENY"
     },
     {
-      "accessType":"READ",
       "principalType":"ROLE",
       "principalId":"$owner",
       "permission":"ALLOW"
     },
     {
-      "accessType":"WRITE",
-      "principalType":"ROLE",
-      "principalId":"$owner",
-      "permission":"ALLOW"
+      "property": "__findById__projects",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "property": "__get__projects__accounts",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
     }
   ],
   "methods": {}

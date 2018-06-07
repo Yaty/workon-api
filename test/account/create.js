@@ -12,6 +12,9 @@ const {
   getThread,
   getProject,
   createProject,
+  getAccountsInProject,
+  getAccountRolesInProject,
+  getProjectDirectors,
 } = require('../utils');
 
 describe('Account creation', function() {
@@ -144,9 +147,36 @@ describe('Account creation', function() {
       })
       .expect(200)
       .then(async function(res) {
-        const p = await getProject(res.body.id, account.token);
+        const p = await getProject(account.id, res.body.id, account.token);
         expect(p).to.be.an('object');
         expect(p.id).to.equal(res.body.id);
+
+        const accounts = await getAccountsInProject(
+          account.id,
+          res.body.id,
+          account.token,
+        );
+
+        expect(accounts).to.be.an('array');
+        expect(accounts[0].id).to.equal(account.id);
+
+        const accountRoles = await getAccountRolesInProject(
+          account.id,
+          res.body.id,
+          account.token,
+        );
+
+        expect(accountRoles).to.be.an('array');
+        expect(accountRoles[0].name).to.equal('director');
+        expect(accountRoles[0].projectId).to.equal(res.body.id);
+
+        const directors = await getProjectDirectors(res.body.id, account.token);
+
+        expect(directors).to.be.an('array');
+        expect(directors[0].projectId).to.equal(res.body.id);
+        expect(directors[0].name).to.equal('director');
+        expect(directors[0].accounts).to.be.an('array');
+        expect(directors[0].accounts[0].id).to.equal(account.id);
       });
   });
 
@@ -155,21 +185,34 @@ describe('Account creation', function() {
       login: true,
     });
 
-    const project = await createProject({
-      name: String(Math.random()),
-    }, director.id);
+    const project = await createProject(0, director);
 
-    return api.put('/api/projects/' + project.id + '/workers/rel/' + account.id)
-      .set('Authorization', 'Bearer ' + account.token)
+    return api.put(
+      '/api/accounts/' + director.id +
+      '/projects/' + project.id +
+      '/accounts/rel/' + account.id
+    )
+      .set('Authorization', 'Bearer ' + director.token)
       .expect(200)
       .then(async function() {
-        const p = await getProject(project.id);
+        const p = await getProject(
+          account.id,
+          project.id,
+          account.token,
+        );
+
         expect(p).to.be.an('object');
         expect(p.id).to.equal(project.id);
-        expect(p.directorId).to.equal(director.id);
-        expect(p.workers).to.be.an('array');
-        expect(p.workers)
-          .to.satisfy(workers => workers.find(w => w.id === account.id));
+
+        const accounts = await getAccountsInProject(
+          account.id,
+          project.id,
+          account.token,
+        );
+
+        expect(accounts).to.be.an('array');
+        expect(accounts)
+          .to.satisfy(accounts => accounts.find(a => a.id === account.id));
       });
   });
 });

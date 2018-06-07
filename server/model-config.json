@@ -56,13 +56,9 @@
     "dataSource": "db",
     "public": true
   },
-  "Associate": {
+  "ProjectRole": {
     "dataSource": "db",
-    "public": true
-  },
-  "AssociateProjectRole": {
-    "dataSource": "db",
-    "public": true
+    "public": false
   },
   "Account": {
     "dataSource": "db",
