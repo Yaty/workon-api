@@ -296,11 +296,23 @@ describe('Account creation', function() {
     throw new Error('todo');
   });
 
-  it('it can have tasks', function() {
+  it('can create tasks', function() {
     throw new Error('todo');
   });
 
-  it('it can have meetings', function() {
+  it('can create meetings', function() {
+    throw new Error('todo');
+  });
+
+  it('can create steps', function() {
+    throw new Error('todo');
+  });
+
+  it('can create topic', function() {
+    throw new Error('todo');
+  });
+
+  it('can create work areas', function() {
     throw new Error('todo');
   });
 });
