@@ -186,9 +186,12 @@ const self = module.exports = {
         });
     });
   },
-  createRole(projectId, directorToken) {
+  createRole(projectId, directorId, directorToken) {
     return new Promise((resolve, reject) => {
-      api.post('/api/projects/' + projectId + '/roles')
+      api.post(
+        '/api/accounts/' + directorId +
+        '/projects/' + projectId + '/roles'
+      )
         .set('Authorization', 'Bearer ' + directorToken)
         .send({
           name: String(Math.random()),

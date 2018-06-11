@@ -12,4 +12,7 @@ module.exports = {
   unauthorized() {
     return factory(401, 'Authorization Required', 'AUTHORIZATION_REQUIRED');
   },
+  userNotFound() {
+    return factory(404, 'User Not Found', 'USER_NOT_FOUND');
+  },
 };

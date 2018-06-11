@@ -15,6 +15,8 @@ const {
   getAccountsInProject,
   getAccountRolesInProject,
   getProjectDirectors,
+  createRole,
+  addAccountToProject,
 } = require('../utils');
 
 describe('Account creation', function() {
@@ -135,7 +137,7 @@ describe('Account creation', function() {
       });
   });
 
-  it('can create projects', async function() {
+  it('can create a project', async function() {
     const [account] = await accountFactory(1, {
       login: true,
     });
@@ -214,5 +216,81 @@ describe('Account creation', function() {
         expect(accounts)
           .to.satisfy(accounts => accounts.find(a => a.id === account.id));
       });
+  });
+
+  it('can add accounts to a project with an email', async function() {
+    const [director, account] = await accountFactory(2, {
+      login: true,
+    });
+
+    const project = await createProject(0, director);
+
+    return api.put(
+      '/api/accounts/' + director.id +
+      '/projects/' + project.id +
+      '/accounts/rel/' + account.email
+    )
+      .set('Authorization', 'Bearer ' + director.token)
+      .expect(200)
+      .then(async function() {
+        const p = await getProject(
+          account.id,
+          project.id,
+          account.token,
+        );
+
+        expect(p).to.be.an('object');
+        expect(p.id).to.equal(project.id);
+
+        const accounts = await getAccountsInProject(
+          account.id,
+          project.id,
+          account.token,
+        );
+
+        expect(accounts).to.be.an('array');
+        expect(accounts)
+          .to.satisfy(accounts => accounts.find(a => a.id === account.id));
+      });
+  });
+
+  it('can have roles chosen by the director of the project', async function() {
+    const [director, account] = await accountFactory(2, {
+      login: true,
+    });
+
+    const project = await createProject(0, director);
+    const role = await createRole(project.id, director.id, director.token);
+    await addAccountToProject(account.id, project.id, director.token);
+
+    console.log(project, role);
+
+    return api.put('/api/accounts/' + account.id + '/roles/rel/' + role.id)
+      .set('Authorization', 'Bearer ' + director.token)
+      .expect(200)
+      .then(async () => {
+        const roles = await getAccountRolesInProject(
+          account.id,
+          project.id,
+          account.token
+        );
+
+        expect(roles).to.be.an('array');
+        expect(roles[0].name).to.equal(role.name);
+        expect(roles[0].id).to.equal(role.id);
+        expect(roles[0].projectId).to.equal(project.id);
+      });
+  });
+
+  it('can\'t set roles to himself inside a project', function() {
+    throw new Error('todo');
+  });
+
+  it('it can have tasks', function() {
+    throw new Error('todo');
+  });
+
+  it('it can have meetings', function() {
+    throw new Error('todo');
   });
 });
