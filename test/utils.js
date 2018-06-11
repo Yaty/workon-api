@@ -98,9 +98,13 @@ const self = module.exports = {
         });
     });
   },
-  addAccountToProject(accountId, projectId, directorToken) {
+  addAccountToProject(accountId, projectId, directorId, directorToken) {
     return new Promise((resolve, reject) => {
-      api.put('/api/accounts/' + accountId + '/projects/rel/' + projectId)
+      api.put(
+        '/api/accounts/' + directorId +
+        '/projects/' + projectId +
+        '/accounts/rel/' + accountId
+      )
         .set('Authorization', 'Bearer ' + directorToken)
         .end((err, res) => {
           if (err) return reject(err);
@@ -228,8 +232,8 @@ const self = module.exports = {
   getAccountRolesInProject(accountId, projectId, accountToken) {
     return new Promise((resolve, reject) => {
       api.get(
-        '/api/accounts/' + accountId +
-        '/projects/' + projectId + '/roles'
+        '/api/accounts/' + accountId + '/roles' +
+        '?filter={"where":{"projectId":"' + projectId + '"}}'
       )
         .set('Authorization', 'Bearer ' + accountToken)
         .end((err, res) => {

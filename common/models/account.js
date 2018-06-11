@@ -47,4 +47,35 @@ module.exports = function(Account) {
       ctx.args.fk = account.id;
     }
   });
+
+  /**
+   * Allow only directors to add roles
+   */
+  Account.beforeRemote('prototype.__link__roles', async (ctx) => {
+    const accountId = ctx.instance && ctx.instance.id;
+    const tokenAccountId = ctx.args.options &&
+      ctx.args.options.accessToken &&
+      ctx.args.options.accessToken.userId;
+    const roleId = ctx.args.fk;
+
+    if (!accountId || !tokenAccountId || !roleId) throw errors.forbidden();
+
+    const tokenAccount = await Account.findById(tokenAccountId);
+    if (!tokenAccount) throw errors.userNotFound();
+
+    const role = await Account.app.models.ProjectRole.findById(roleId);
+    if (!role) throw errors.roleNotFound();
+
+    const projectId = String(role.projectId);
+
+    // TODO : Make the filter inside the find (when not using MongoDB anymore)
+    const tokenAccountRoles = (await tokenAccount.roles.find())
+      .filter((r) => String(r.projectId) === String(projectId));
+
+    const isDirector = tokenAccountRoles
+      .map((r) => r.name)
+      .includes('director');
+
+    if (!isDirector) throw errors.forbidden();
+  });
 };

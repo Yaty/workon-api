@@ -4,7 +4,8 @@
   "base": "User",
   "idInjection": true,
   "options": {
-    "validateUpsert": true
+    "validateUpsert": true,
+    "strictObjectIDCoercion": true
   },
   "properties": {
     "lastname": {
@@ -74,6 +75,12 @@
       "property": "__get__projects__accounts",
       "principalType": "ROLE",
       "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "property": "__link__roles",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
       "permission": "ALLOW"
     }
   ],

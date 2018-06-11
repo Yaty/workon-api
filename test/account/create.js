@@ -160,6 +160,7 @@ describe('Account creation', function() {
         );
 
         expect(accounts).to.be.an('array');
+        expect(accounts).to.have.lengthOf(1);
         expect(accounts[0].id).to.equal(account.id);
 
         const accountRoles = await getAccountRolesInProject(
@@ -169,12 +170,14 @@ describe('Account creation', function() {
         );
 
         expect(accountRoles).to.be.an('array');
+        expect(accountRoles).to.have.lengthOf(1);
         expect(accountRoles[0].name).to.equal('director');
         expect(accountRoles[0].projectId).to.equal(res.body.id);
 
         const directors = await getProjectDirectors(res.body.id, account.token);
 
         expect(directors).to.be.an('array');
+        expect(directors).to.have.lengthOf(1);
         expect(directors[0].projectId).to.equal(res.body.id);
         expect(directors[0].name).to.equal('director');
         expect(directors[0].accounts).to.be.an('array');
@@ -261,11 +264,17 @@ describe('Account creation', function() {
 
     const project = await createProject(0, director);
     const role = await createRole(project.id, director.id, director.token);
-    await addAccountToProject(account.id, project.id, director.token);
+    await addAccountToProject(
+      account.id,
+      project.id,
+      director.id,
+      director.token,
+    );
 
-    console.log(project, role);
-
-    return api.put('/api/accounts/' + account.id + '/roles/rel/' + role.id)
+    return api.put(
+      '/api/accounts/' + account.id +
+      '/roles/rel/' + role.id
+    )
       .set('Authorization', 'Bearer ' + director.token)
       .expect(200)
       .then(async () => {
@@ -276,6 +285,7 @@ describe('Account creation', function() {
         );
 
         expect(roles).to.be.an('array');
+        expect(roles).to.have.lengthOf(1);
         expect(roles[0].name).to.equal(role.name);
         expect(roles[0].id).to.equal(role.id);
         expect(roles[0].projectId).to.equal(project.id);

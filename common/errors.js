@@ -15,4 +15,10 @@ module.exports = {
   userNotFound() {
     return factory(404, 'User Not Found', 'USER_NOT_FOUND');
   },
+  forbidden() {
+    return factory(403, 'Forbidden', 'FORBIDDEN');
+  },
+  roleNotFound() {
+    return factory(404, 'Role Not Found', 'ROLE_NOT_FOUND');
+  },
 };
