@@ -1,21 +1,26 @@
 'use strict';
 
 module.exports = function enableAuthentication(server) {
-  const ds = server.dataSources.db;
+  const ds = server.dataSources.mysql;
 
   const models = [
-    'AccessToken',
     'Account',
-    'AccountProject',
-    'AccountProjectRole',
+    'Role',
+    'Meeting',
+    'Step',
+    'WorkArea',
+    'Task',
+    'Topic',
     'Message',
     'Project',
     'ProjectRole',
     'Thread',
     'ThreadAccount',
+    'AccountProject',
+    'AccountProjectRole',
   ];
 
-  ds.automigrate(models, function(err) {
+  ds.autoupdate(models, function(err) {
     if (err) throw err;
     console.log('Tables [' + models + '] created in ', ds.adapter.name);
   });
