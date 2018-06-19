@@ -12,8 +12,12 @@
       "required": true
     },
     "state": {
-      "type": "boolean",
-      "default": false
+      "type": "string",
+      "default": "Ouvert"
+    },
+    "description": {
+      "type": "string",
+      "required": true
     },
     "created": {
       "type": "date",
@@ -35,7 +39,7 @@
     "creator": {
       "type": "belongsTo",
       "model": "Account",
-      "foreignKey": ""
+      "foreignKey": "creatorId"
     },
     "assignees": {
       "type": "hasAndBelongsToMany",

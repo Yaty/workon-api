@@ -29,11 +29,6 @@
       "model": "Step",
       "foreignKey": ""
     },
-    "workAreas": {
-      "type": "hasMany",
-      "model": "WorkArea",
-      "foreignKey": ""
-    },
     "roles": {
       "type": "hasMany",
       "model": "ProjectRole",
@@ -42,6 +37,16 @@
     "bugs": {
       "type": "hasMany",
       "model": "Bug",
+      "foreignKey": ""
+    },
+    "tasks": {
+      "type": "hasMany",
+      "model": "Task",
+      "foreignKey": ""
+    },
+    "topics": {
+      "type": "hasMany",
+      "model": "Topic",
       "foreignKey": ""
     }
   },

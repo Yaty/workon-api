@@ -33,6 +33,11 @@
       "type": "belongsTo",
       "model": "Topic",
       "foreignKey": ""
+    },
+    "project": {
+      "type": "belongsTo",
+      "model": "Project",
+      "foreignKey": ""
     }
   },
   "acls": [],

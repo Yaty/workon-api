@@ -15,8 +15,12 @@ module.exports = function(Account) {
    * Affect the director role to the Account that created the project
    */
   Account.afterRemote('prototype.__create__projects', async (ctx, output) => {
-    const userId = ctx.args.options.accessToken.userId;
+    const userId = ctx.args.options &&
+      ctx.args.options.accessToken &&
+      ctx.args.options.accessToken.userId;
     const projectId = output.id;
+
+    if (!userId || !projectId) throw errors.forbidden();
 
     // Create the director role
     const ProjectRole = Account.app.models.ProjectRole;
@@ -78,4 +82,18 @@ module.exports = function(Account) {
 
     if (!isDirector) throw errors.forbidden();
   });
+
+  /**
+   * Add the creator id to the bug
+   */
+  Account.beforeRemote('prototype.__create__projects__bugs',
+    async (ctx) => {
+      const accountId = ctx.args.options &&
+        ctx.args.options.accessToken &&
+        ctx.args.options.accessToken.userId;
+
+      if (!accountId) throw errors.forbidden();
+
+      ctx.args.data.creatorId = accountId;
+    });
 };

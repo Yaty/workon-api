@@ -292,27 +292,170 @@ describe('Account creation', function() {
       });
   });
 
-  it('can\'t set roles to himself inside a project', function() {
-    throw new Error('todo');
+  it('can\'t set roles to himself inside a project', async function() {
+    const [director, account] = await accountFactory(2, {
+      login: true,
+    });
+
+    const project = await createProject(0, director);
+    const role = await createRole(project.id, director.id, director.token);
+    await addAccountToProject(
+      account.id,
+      project.id,
+      director.id,
+      director.token,
+    );
+
+    return api.put(
+      '/api/accounts/' + account.id +
+      '/roles/rel/' + role.id
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .expect(403);
   });
 
-  it('can create tasks', function() {
-    throw new Error('todo');
+  it('can create tasks', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+
+    const task = {
+      name: uuid(),
+      state: uuid(),
+    };
+
+    return api.post(
+      '/api/accounts/' + account.id +
+      '/projects/' + project.id +
+      '/tasks'
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .send(task)
+      .expect(200)
+      .then((res) => {
+        for (const [key, value] of Object.entries(task)) {
+          expect(res.body[key]).to.equal(value);
+        }
+
+        expect(res.body.projectId).to.equal(project.id);
+      });
   });
 
-  it('can create meetings', function() {
-    throw new Error('todo');
+  it('can create meetings', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+
+    const meeting = {
+      date: new Date().toISOString(),
+      subject: uuid(),
+      place: uuid(),
+    };
+
+    return api.post(
+      '/api/accounts/' + account.id +
+      '/projects/' + project.id +
+      '/meetings'
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .send(meeting)
+      .expect(200)
+      .then((res) => {
+        for (const [key, value] of Object.entries(meeting)) {
+          expect(res.body[key]).to.equal(value);
+        }
+
+        expect(res.body.projectId).to.equal(project.id);
+      });
   });
 
-  it('can create steps', function() {
-    throw new Error('todo');
+  it('can create steps', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+
+    const step = {
+      date: new Date().toISOString(),
+      name: uuid(),
+      state: uuid(),
+    };
+
+    return api.post(
+      '/api/accounts/' + account.id +
+      '/projects/' + project.id +
+      '/steps'
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .send(step)
+      .expect(200)
+      .then((res) => {
+        for (const [key, value] of Object.entries(step)) {
+          expect(res.body[key]).to.equal(value);
+        }
+
+        expect(res.body.projectId).to.equal(project.id);
+      });
   });
 
   it('can create topic', function() {
     throw new Error('todo');
   });
 
-  it('can create work areas', function() {
+  it('can create bug', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+
+    const bug = {
+      name: uuid(),
+      state: uuid(),
+      description: uuid(),
+    };
+
+    return api.post(
+      '/api/accounts/' + account.id +
+      '/projects/' + project.id +
+      '/bugs'
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .send(bug)
+      .expect(200)
+      .then((res) => {
+        for (const [key, value] of Object.entries(bug)) {
+          expect(res.body[key]).to.equal(value);
+        }
+
+        expect(res.body).to.have.property('created');
+        expect(res.body.projectId).to.equal(project.id);
+        expect(res.body.creatorId).to.equal(account.id);
+      });
+  });
+
+  it('can create bug and assign people to it', function() {
+    throw new Error('todo');
+  });
+
+  it('can assign himself to a bug', function() {
+    throw new Error('todo');
+  });
+
+  it('can upload files to a project', function() {
+    throw new Error('todo');
+  });
+
+  it('can rename a file in a project', function() {
+    throw new Error('todo');
+  });
+
+  it('can delete files from a project', function() {
     throw new Error('todo');
   });
 });

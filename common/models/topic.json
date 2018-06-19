@@ -17,7 +17,7 @@
   "relations": {
     "bug": {
       "type": "belongsTo",
-      "model": "BUg",
+      "model": "Bgg",
       "foreignKey": ""
     },
     "thread": {
@@ -28,6 +28,11 @@
     "task": {
       "type": "belongsTo",
       "model": "Task",
+      "foreignKey": ""
+    },
+    "project": {
+      "type": "belongsTo",
+      "model": "Project",
       "foreignKey": ""
     }
   },

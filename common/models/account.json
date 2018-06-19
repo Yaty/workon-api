@@ -56,7 +56,7 @@
     "bugs": {
       "type": "hasMany",
       "model": "Bug",
-      "foreignKey": ""
+      "foreignKey": "creatorId"
     },
     "assignments": {
       "type": "hasAndBelongsToMany",
