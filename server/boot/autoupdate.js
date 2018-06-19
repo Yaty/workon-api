@@ -1,14 +1,14 @@
 'use strict';
 
 module.exports = function enableAuthentication(server) {
-  const ds = server.dataSources.mysql;
+  const ds = server.dataSources.db;
 
   const models = [
     'Account',
     'Role',
     'Meeting',
     'Step',
-    'WorkArea',
+    'Bug',
     'Task',
     'Topic',
     'Message',

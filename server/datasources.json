@@ -8,5 +8,12 @@
     "password": "",
     "user": "",
     "connector": "mongodb"
+  },
+  "file-storage": {
+    "name": "file-storage",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "./server/storage",
+    "nameConflict": "makeUnique"
   }
 }

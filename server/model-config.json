@@ -48,7 +48,7 @@
     "dataSource": "db",
     "public": true
   },
-  "WorkArea": {
+  "Bug": {
     "dataSource": "db",
     "public": true
   },

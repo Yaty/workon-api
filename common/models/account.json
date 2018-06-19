@@ -52,6 +52,16 @@
       "type": "hasAndBelongsToMany",
       "model": "Meeting",
       "foreignKey": ""
+    },
+    "bugs": {
+      "type": "hasMany",
+      "model": "Bug",
+      "foreignKey": ""
+    },
+    "assignments": {
+      "type": "hasAndBelongsToMany",
+      "model": "Bug",
+      "foreignKey": ""
     }
   },
   "acls": [

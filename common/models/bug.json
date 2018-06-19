@@ -1,5 +1,5 @@
 {
-  "name": "WorkArea",
+  "name": "Bug",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -10,6 +10,14 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "state": {
+      "type": "boolean",
+      "default": false
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
     }
   },
   "validations": [],
@@ -22,6 +30,16 @@
     "topics": {
       "type": "hasMany",
       "model": "Topic",
+      "foreignKey": ""
+    },
+    "creator": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": ""
+    },
+    "assignees": {
+      "type": "hasAndBelongsToMany",
+      "model": "Account",
       "foreignKey": ""
     }
   },

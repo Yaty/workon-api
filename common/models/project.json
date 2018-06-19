@@ -38,6 +38,11 @@
       "type": "hasMany",
       "model": "ProjectRole",
       "foreignKey": ""
+    },
+    "bugs": {
+      "type": "hasMany",
+      "model": "Bug",
+      "foreignKey": ""
     }
   },
   "acls": [

@@ -15,9 +15,9 @@
   },
   "validations": [],
   "relations": {
-    "workArea": {
+    "bug": {
       "type": "belongsTo",
-      "model": "WorkArea",
+      "model": "BUg",
       "foreignKey": ""
     },
     "thread": {
