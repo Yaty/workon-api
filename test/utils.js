@@ -244,12 +244,6 @@ const self = module.exports = {
   },
   getProjectDirectors(projectId, accountToken) {
     return new Promise((resolve, reject) => {
-      const filter = {
-        include: {
-          relation: 'accounts',
-        },
-      };
-
       api.get(
         '/api/projects/' + projectId +
         '/roles?filter={"include":{"relation":"accounts"}}'
@@ -258,6 +252,40 @@ const self = module.exports = {
         .end((err, res) => {
           if (err) return reject(err);
           return resolve(res.body.filter((role) => role.name === 'director'));
+        });
+    });
+  },
+  createBug(accountId, accountToken, projectId) {
+    return new Promise((resolve, reject) => {
+      const bug = {
+        name: self.uuid(),
+        state: self.uuid(),
+        description: self.uuid(),
+      };
+
+      api.post(
+        '/api/accounts/' +  accountId +
+        '/projects/' + projectId +
+        '/bugs'
+      )
+        .set('Authorization', 'Bearer ' + accountToken)
+        .send(bug)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
+        });
+    });
+  },
+  getBug(bugId, accountToken) {
+    return new Promise((resolve, reject) => {
+      api.get(
+        '/api/bugs/' + bugId +
+        '?filter={"include":{"relation":"assignees"}}'
+      )
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.body);
         });
     });
   },

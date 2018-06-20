@@ -17,6 +17,8 @@ const {
   getProjectDirectors,
   createRole,
   addAccountToProject,
+  createBug,
+  getBug,
 } = require('../utils');
 
 describe('Account creation', function() {
@@ -403,10 +405,6 @@ describe('Account creation', function() {
       });
   });
 
-  it('can create topic', function() {
-    throw new Error('todo');
-  });
-
   it('can create bug', async function() {
     const [account] = await accountFactory(1, {
       login: true,
@@ -439,11 +437,59 @@ describe('Account creation', function() {
       });
   });
 
-  it('can create bug and assign people to it', function() {
-    throw new Error('todo');
+  it('can create bug and assign people to it', async function() {
+    const [account, secondAccount] = await accountFactory(2, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+    const bug = await createBug(account.id, account.token, project.id);
+
+    return api.put(
+      '/api/bugs/' + bug.id +
+      '/assignees/rel/' + secondAccount.id
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .expect(200)
+      .then(async () => {
+        const b = await getBug(bug.id, account.token);
+
+        for (const [key, value] of Object.entries(bug)) {
+          expect(b[key]).to.equal(value);
+        }
+
+        expect(b.assignees).to.be.an('array');
+        expect(b.assignees[0].id).to.equal(secondAccount.id);
+      });
   });
 
-  it('can assign himself to a bug', function() {
+  it('can assign himself to a bug', async function() {
+    const [account] = await accountFactory(2, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+    const bug = await createBug(account.id, account.token, project.id);
+
+    return api.put(
+      '/api/bugs/' + bug.id +
+      '/assignees/rel/' + account.id
+    )
+      .set('Authorization', 'Bearer ' + account.token)
+      .expect(200)
+      .then(async () => {
+        const b = await getBug(bug.id, account.token);
+
+        for (const [key, value] of Object.entries(bug)) {
+          expect(b[key]).to.equal(value);
+        }
+
+        expect(b.assignees).to.be.an('array');
+        expect(b.assignees[0].id).to.equal(account.id);
+      });
+  });
+
+  it('can create topic', function() {
     throw new Error('todo');
   });
 
