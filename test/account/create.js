@@ -1,7 +1,9 @@
 'use strict';
 
+const fs = require('fs');
 const api = require('../api');
 const {expect} = require('chai');
+
 const {
   uuid,
   isValidValidationError,
@@ -19,6 +21,8 @@ const {
   addAccountToProject,
   createBug,
   getBug,
+  getFile,
+  createFile,
 } = require('../utils');
 
 describe('Account creation', function() {
@@ -185,6 +189,18 @@ describe('Account creation', function() {
         expect(directors[0].accounts).to.be.an('array');
         expect(directors[0].accounts[0].id).to.equal(account.id);
       });
+  });
+
+  it('create a container when a project is created', async function() {
+    const [director] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, director);
+
+    return api.get('/api/containers/' + project.id)
+      .set('Authorization', 'Bearer ' + director.token)
+      .expect(200);
   });
 
   it('can add workers to a project', async function() {
@@ -489,19 +505,72 @@ describe('Account creation', function() {
       });
   });
 
+  it('can upload files to a project', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+    const fileName = 'test_file.txt';
+
+    return api.post('/api/containers/' + project.id + '/upload')
+      .set('Authorization', 'Bearer ' + account.token)
+      .field('name', 'test_file')
+      .attach('test_file', 'test/' + fileName)
+      .expect(200)
+      .then(async () => {
+        const downloadedFile = await getFile(
+          project.id,
+          account.token,
+          fileName
+        );
+
+        const file = fs.readFileSync('test/' + fileName);
+        expect(downloadedFile).to.equal(file.toString());
+
+        const fileExists = fs.existsSync(
+          'server/storage/' + project.id + '/' + fileName
+        );
+        expect(fileExists).to.equal(true);
+      });
+  });
+
+  it('can download a file in a project', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+    const [fileName, fileContent] = await createFile(project.id, account.token);
+
+    return api.get('/api/containers/' + project.id + '/download/' + fileName)
+      .set('Authorization', 'Bearer ' + account.token)
+      .expect(200)
+      .then((res) => {
+        expect(res.text).to.equal(fileContent);
+      });
+  });
+
+  it('can delete files from a project', async function() {
+    const [account] = await accountFactory(1, {
+      login: true,
+    });
+
+    const project = await createProject(0, account);
+    const [fileName] = await createFile(project.id, account.token);
+
+    return api.delete('/api/containers/' + project.id + '/files/' + fileName)
+      .set('Authorization', 'Bearer ' + account.token)
+      .expect(200)
+      .then(() => {
+        const fileExists = fs.existsSync(
+          'server/storage/' + project.id + '/' + fileName
+        );
+        expect(fileExists).to.equal(false);
+      });
+  });
+
   it('can create topic', function() {
-    throw new Error('todo');
-  });
-
-  it('can upload files to a project', function() {
-    throw new Error('todo');
-  });
-
-  it('can rename a file in a project', function() {
-    throw new Error('todo');
-  });
-
-  it('can delete files from a project', function() {
     throw new Error('todo');
   });
 });

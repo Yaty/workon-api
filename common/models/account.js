@@ -34,6 +34,20 @@ module.exports = function(Account) {
   });
 
   /**
+   * Create a container when a project is created
+   */
+  Account.afterRemote('prototype.__create__projects', (ctx, output, cb) => {
+    const Container = Account.app.models.Container;
+
+    Container.createContainer({
+      name: String(output.id),
+    }, (err) => {
+      if (err) return cb(err);
+      cb();
+    });
+  });
+
+  /**
    * Allow to link an account to a project with an email
    */
   Account.beforeRemote('prototype.__link__projects__accounts', async (ctx) => {

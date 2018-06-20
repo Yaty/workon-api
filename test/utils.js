@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const {expect} = require('chai');
 const api = require('./api');
 
@@ -286,6 +287,34 @@ const self = module.exports = {
         .end((err, res) => {
           if (err) return reject(err);
           return resolve(res.body);
+        });
+    });
+  },
+  getFile(projectId, accountToken, fileName) {
+    return new Promise((resolve, reject) => {
+      api.get('/api/containers/' + projectId + '/download/' + fileName)
+        .set('Authorization', 'Bearer ' + accountToken)
+        .end((err, res) => {
+          if (err) return reject(err);
+          return resolve(res.text);
+        });
+    });
+  },
+  createFile(projectId, accountToken) {
+    return new Promise((resolve, reject) => {
+      const fileName = self.uuid() + '.txt';
+      const fileContent = self.uuid();
+
+      fs.writeFileSync('test/tmp/' + fileName, fileContent);
+
+      api.post('/api/containers/' + projectId + '/upload')
+        .set('Authorization', 'Bearer ' + accountToken)
+        .field('name', 'test_file')
+        .attach('test_file', 'test/tmp/' + fileName)
+        .expect(200)
+        .end((err) => {
+          if (err) return reject(err);
+          return resolve([fileName, fileContent]);
         });
     });
   },
