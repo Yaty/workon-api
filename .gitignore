@@ -21,3 +21,4 @@ npm-debug.log
 test/tmp/*
 !test/tmp/.gitkeep
 server/storage/*
+!server/storage/.gitkeep
