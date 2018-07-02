@@ -31,11 +31,6 @@
       "model": "Project",
       "foreignKey": ""
     },
-    "topics": {
-      "type": "hasMany",
-      "model": "Topic",
-      "foreignKey": ""
-    },
     "creator": {
       "type": "belongsTo",
       "model": "Account",
