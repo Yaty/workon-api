@@ -10,12 +10,9 @@ module.exports = function enableAuthentication(server) {
     'Step',
     'Bug',
     'Task',
-    'Topic',
     'Message',
     'Project',
     'ProjectRole',
-    'Thread',
-    'ThreadAccount',
     'AccountProject',
     'AccountProjectRole',
   ];

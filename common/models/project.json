@@ -47,11 +47,6 @@
       "type": "hasMany",
       "model": "Task",
       "foreignKey": ""
-    },
-    "topics": {
-      "type": "hasMany",
-      "model": "Topic",
-      "foreignKey": ""
     }
   },
   "acls": [

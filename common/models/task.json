@@ -29,9 +29,9 @@
       "model": "Step",
       "foreignKey": ""
     },
-    "topic": {
-      "type": "belongsTo",
-      "model": "Topic",
+    "messages": {
+      "type": "hasMany",
+      "model": "Message",
       "foreignKey": ""
     },
     "project": {

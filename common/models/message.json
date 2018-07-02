@@ -19,14 +19,14 @@
       "model": "Account",
       "foreignKey": ""
     },
-    "thread": {
-      "type": "belongsTo",
-      "model": "Thread",
-      "foreignKey": ""
-    },
     "bug": {
       "type": "belongsTo",
       "model": "Bug",
+      "foreignKey": ""
+    },
+    "task": {
+      "type": "belongsTo",
+      "model": "Task",
       "foreignKey": ""
     }
   },

@@ -9,7 +9,7 @@
     "user": "",
     "connector": "mongodb"
   },
-  "storage ": {
+  "storage": {
     "name": "storage",
     "connector": "loopback-component-storage",
     "provider": "filesystem",

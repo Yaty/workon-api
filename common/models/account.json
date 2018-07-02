@@ -28,11 +28,6 @@
       "model": "Message",
       "foreignKey": ""
     },
-    "threads": {
-      "type": "hasAndBelongsToMany",
-      "model": "Thread",
-      "foreignKey": ""
-    },
     "projects": {
       "type": "hasAndBelongsToMany",
       "model": "Project",
