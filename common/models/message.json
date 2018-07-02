@@ -23,6 +23,11 @@
       "type": "belongsTo",
       "model": "Thread",
       "foreignKey": ""
+    },
+    "bug": {
+      "type": "belongsTo",
+      "model": "Bug",
+      "foreignKey": ""
     }
   },
   "acls": [],
