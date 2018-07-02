@@ -45,6 +45,11 @@
       "type": "hasAndBelongsToMany",
       "model": "Account",
       "foreignKey": ""
+    },
+    "messages": {
+      "type": "hasMany",
+      "model": "Message",
+      "foreignKey": ""
     }
   },
   "acls": [],
