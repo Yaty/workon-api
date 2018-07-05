@@ -1,9 +1,11 @@
 'use strict';
 
 module.exports = function enableAuthentication(server) {
-  const ds = server.dataSources.db;
+  const ds = server.dataSources.mysql;
 
   const models = [
+    'ACL',
+    'AccessToken',
     'Account',
     'Role',
     'Meeting',

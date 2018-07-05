@@ -16,9 +16,8 @@
       "required": true
     },
     "state": {
-      "type": "string",
-      "required": true,
-      "default": "En cours"
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

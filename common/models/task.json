@@ -12,9 +12,8 @@
       "required": true
     },
     "state": {
-      "type": "string",
-      "required": true,
-      "default": "En attente"
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

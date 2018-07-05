@@ -12,8 +12,8 @@
       "required": true
     },
     "state": {
-      "type": "string",
-      "default": "Ouvert"
+      "type": "boolean",
+      "default": false
     },
     "description": {
       "type": "string",

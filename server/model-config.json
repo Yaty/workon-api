@@ -14,58 +14,58 @@
     ]
   },
   "User": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "Meeting": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "Project": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "Step": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "Bug": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "Task": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "ProjectRole": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "Account": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "Message": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true
   },
   "Container": {

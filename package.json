@@ -8,6 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
+    "load": "artillery run test/load/create.yaml",
     "test": "mocha test --recursive --exit --no-timeouts",
     "posttest": "npm run lint && nsp check",
     "coverage": "nyc npm run test"
@@ -22,10 +23,12 @@
     "loopback-component-storage": "^3.3.1",
     "loopback-connector-mongodb": "^3.4.4",
     "loopback-connector-mysql": "^2.4.1",
+    "npm": "^6.1.0",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^2.0.0"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-22",
     "chai": "^4.1.2",
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",

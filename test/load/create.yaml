@@ -1,0 +1,26 @@
+config:
+  target: "http://localhost:3000"
+  http:
+    pool: 10
+    timeout: 10
+  phases:
+    - name: "Warm-up"
+      duration: 2
+      arrivalRate: 2
+    - name: "Pause"
+      pause: 2
+    - name: "Heavy load"
+      duration: 10
+      arrivalRate: 20
+      rampTo: 200
+
+scenarios:
+  - name: "Create accounts"
+    flow:
+      - post:
+          url: "/api/accounts"
+          json:
+            firstname: "{{ $randomString() }}"
+            lastname: "{{ $randomString() }}"
+            email: "{{ $randomString() }}@test.fr"
+            password: "{{ $randomString() }}"
