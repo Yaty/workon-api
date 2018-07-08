@@ -57,6 +57,11 @@
       "type": "hasAndBelongsToMany",
       "model": "Bug",
       "foreignKey": ""
+    },
+    "conversations": {
+      "type": "hasAndBelongsToMany",
+      "model": "Conversation",
+      "foreignKey": ""
     }
   },
   "acls": [

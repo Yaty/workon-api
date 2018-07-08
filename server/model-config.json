@@ -71,5 +71,9 @@
   "Container": {
     "dataSource": "storage",
     "public": true
+  },
+  "Conversation": {
+    "dataSource": "mysql",
+    "public": true
   }
 }

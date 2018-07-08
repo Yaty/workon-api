@@ -8,6 +8,7 @@ module.exports = function enableAuthentication(server) {
     'AccessToken',
     'Account',
     'Role',
+    'Conversation',
     'Meeting',
     'Step',
     'Bug',

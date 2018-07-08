@@ -1,5 +1,5 @@
 {
-  "name": "Message",
+  "name": "Conversation",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -7,31 +7,21 @@
     "strictObjectIDCoercion": true
   },
   "properties": {
-    "content": {
+    "name": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "account": {
-      "type": "belongsTo",
+    "accounts": {
+      "type": "hasAndBelongsToMany",
       "model": "Account",
       "foreignKey": ""
     },
-    "bug": {
-      "type": "belongsTo",
-      "model": "Bug",
-      "foreignKey": ""
-    },
-    "task": {
-      "type": "belongsTo",
-      "model": "Task",
-      "foreignKey": ""
-    },
-    "conversation": {
-      "type": "belongsTo",
-      "model": "Conversation",
+    "messages": {
+      "type": "hasMany",
+      "model": "Message",
       "foreignKey": ""
     }
   },
