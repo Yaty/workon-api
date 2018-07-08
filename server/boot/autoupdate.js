@@ -18,6 +18,7 @@ module.exports = function enableAuthentication(server) {
     'ProjectRole',
     'AccountProject',
     'AccountProjectRole',
+    'ConversationAccount',
   ];
 
   ds.autoupdate(models, function(err) {
