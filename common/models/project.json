@@ -72,6 +72,12 @@
       "principalType":"ROLE",
       "principalId":"$authenticated",
       "permission":"ALLOW"
+    },
+    {
+      "property": "patchAttributes",
+      "principalType":"ROLE",
+      "principalId":"$authenticated",
+      "permission":"ALLOW"
     }
   ],
   "methods": {}
