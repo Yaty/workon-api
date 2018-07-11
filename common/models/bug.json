@@ -36,6 +36,11 @@
       "model": "Account",
       "foreignKey": "creatorId"
     },
+    "closedBy": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": "closerId"
+    },
     "assignees": {
       "type": "hasAndBelongsToMany",
       "model": "Account",
