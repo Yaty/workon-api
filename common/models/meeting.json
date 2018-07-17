@@ -18,6 +18,11 @@
     "place": {
       "type": "string",
       "required": true
+    },
+    "summary": {
+      "type": "string",
+      "required": false,
+      "default": null
     }
   },
   "validations": [],
