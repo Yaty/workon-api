@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function enableAuthentication(server) {
+module.exports = function enableAuthentication(server, cb) {
   const ds = server.dataSources.mysql;
 
   const models = [
@@ -11,6 +11,7 @@ module.exports = function enableAuthentication(server) {
     'Conversation',
     'Meeting',
     'Step',
+    'AccountBug',
     'Bug',
     'Task',
     'Message',
@@ -24,7 +25,8 @@ module.exports = function enableAuthentication(server) {
   ds.setMaxListeners(Infinity);
 
   ds.autoupdate(models, function(err) {
-    if (err) throw err;
+    if (err) return cb(err);
     console.log('Tables [' + models + '] created in ', ds.adapter.name);
+    cb();
   });
 };

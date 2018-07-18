@@ -12,7 +12,7 @@ config:
     - name: "Heavy load"
       duration: 10
       arrivalRate: 20
-      rampTo: 200
+      rampTo: 100
 
 scenarios:
   - name: "Create accounts"

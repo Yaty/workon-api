@@ -124,25 +124,6 @@ describe('Account creation', function() {
       });
   });
 
-  it('can have threads', async function() {
-    const [account] = await accountFactory(1, {
-      login: true,
-    });
-
-    return api.post('/api/accounts/' + account.id + '/threads')
-      .set('Authorization', 'Bearer ' + account.token)
-      .send({
-        name: String(Math.random()),
-      })
-      .expect(200)
-      .then(async function(res) {
-        const t = await getThread(account.id, res.body.id, account.token);
-        expect(t).to.be.an('object');
-        expect(t.id).to.equal(res.body.id);
-        expect(t.name).to.be.an('string');
-      });
-  });
-
   it('can create a project', async function() {
     const [account] = await accountFactory(1, {
       login: true,
@@ -341,7 +322,7 @@ describe('Account creation', function() {
 
     const task = {
       name: uuid(),
-      state: uuid(),
+      state: true,
     };
 
     return api.post(
@@ -401,7 +382,7 @@ describe('Account creation', function() {
     const step = {
       date: new Date().toISOString(),
       name: uuid(),
-      state: uuid(),
+      state: true,
     };
 
     return api.post(
@@ -430,7 +411,7 @@ describe('Account creation', function() {
 
     const bug = {
       name: uuid(),
-      state: uuid(),
+      state: true,
       description: uuid(),
     };
 
@@ -469,11 +450,7 @@ describe('Account creation', function() {
       .expect(200)
       .then(async () => {
         const b = await getBug(bug.id, account.token);
-
-        for (const [key, value] of Object.entries(bug)) {
-          expect(b[key]).to.equal(value);
-        }
-
+        expect(b.id).to.equal(bug.id);
         expect(b.assignees).to.be.an('array');
         expect(b.assignees[0].id).to.equal(secondAccount.id);
       });
@@ -496,10 +473,7 @@ describe('Account creation', function() {
       .then(async () => {
         const b = await getBug(bug.id, account.token);
 
-        for (const [key, value] of Object.entries(bug)) {
-          expect(b[key]).to.equal(value);
-        }
-
+        expect(b.id).to.equal(bug.id);
         expect(b.assignees).to.be.an('array');
         expect(b.assignees[0].id).to.equal(account.id);
       });
@@ -568,9 +542,5 @@ describe('Account creation', function() {
         );
         expect(fileExists).to.equal(false);
       });
-  });
-
-  it('can create topic', function() {
-    throw new Error('todo');
   });
 });
