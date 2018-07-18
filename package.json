@@ -10,7 +10,7 @@
     "start": "node .",
     "load": "artillery run test/load/create.yaml",
     "test": "mocha test --recursive --exit --no-timeouts",
-    "posttest": "npm run lint && nsp check",
+    "posttest": "npm run lint",
     "coverage": "nyc npm run test"
   },
   "dependencies": {
